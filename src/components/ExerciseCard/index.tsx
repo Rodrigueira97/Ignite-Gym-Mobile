@@ -2,9 +2,12 @@ import { Entypo } from "@expo/vector-icons";
 import { HStack, Heading, Icon, Image, Text, VStack } from "native-base";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 
-interface PropsExerciseCard extends TouchableOpacityProps {}
+interface PropsExerciseCard extends TouchableOpacityProps {
+  name: string;
+  image: string;
+}
 
-export function ExerciseCard({ ...rest }: PropsExerciseCard) {
+export function ExerciseCard({ name, image, ...rest }: PropsExerciseCard) {
   return (
     <TouchableOpacity {...rest}>
       <HStack
@@ -17,7 +20,7 @@ export function ExerciseCard({ ...rest }: PropsExerciseCard) {
       >
         <Image
           source={{
-            uri: "https://www.origym.com.br/midia/remada-unilateral-3.jpg",
+            uri: image,
           }}
           alt="remada-unilateral"
           w={16}
@@ -29,7 +32,7 @@ export function ExerciseCard({ ...rest }: PropsExerciseCard) {
 
         <VStack flex={1}>
           <Heading fontSize={"lg"} color={"white"}>
-            Remada unilateral
+            {name}
           </Heading>
 
           <Text fontSize={"sm"} color={"gray.200"} mt={1} numberOfLines={2}>
