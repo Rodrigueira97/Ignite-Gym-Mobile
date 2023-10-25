@@ -13,6 +13,7 @@ export function SignIn() {
     navigate("signUp");
   }
 
+  // lack to do the form and your validations
   return (
     <ScrollView
       contentContainerStyle={{
