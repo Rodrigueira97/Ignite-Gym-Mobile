@@ -113,6 +113,7 @@ export function Profile() {
             color={"gray.200"}
             fontSize={"md"}
             alignSelf={"flex-start"}
+            fontFamily={"heading"}
             mb={2}
             mt={12}
           >
