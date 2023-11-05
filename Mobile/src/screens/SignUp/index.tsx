@@ -1,4 +1,4 @@
-import { Center, Heading, Image, ScrollView, Text, VStack } from "native-base";
+import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from "native-base";
 import BackgroundImg from "@assets/background.png";
 import LogoSvg from "@assets/logo.svg";
 import { Input } from "@components/Input";
@@ -8,8 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./form";
 import { api } from "@services/api";
-import axios from "axios";
-import { Alert } from "react-native";
+import { AppError } from "@utils/AppError";
 
 interface PropsFormData {
   name: string;
@@ -20,6 +19,8 @@ interface PropsFormData {
 
 export function SignUp() {
   const { goBack } = useNavigation();
+
+  const {show:toast} = useToast()
 
   const initialValues = {
     name: "",
@@ -47,11 +48,13 @@ export function SignUp() {
       console.log(response)
 
     } catch (error) {
-      if(axios.isAxiosError(error)){
+      const title =  error instanceof AppError ? error.message : 'Não foi possível criar a conta!, Tente novamente mais tarde'
 
-        Alert.alert(error?.response?.data?.message)
-      }
-
+      toast({
+        title,
+        placement:'top',
+        bgColor:'red.500'
+      })
     }
 
 
