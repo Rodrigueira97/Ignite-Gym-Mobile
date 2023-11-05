@@ -7,6 +7,9 @@ import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./form";
+import { api } from "@services/api";
+import axios from "axios";
+import { Alert } from "react-native";
 
 interface PropsFormData {
   name: string;
@@ -34,9 +37,25 @@ export function SignUp() {
     defaultValues: initialValues,
   });
 
-  function handleSignUp({name,email,password}: PropsFormData) {
-    console.log({name,email,password});
-    fetch('http://192.168.2.111:3333/users',{
+  async function handleSignUp({name,email,password}: PropsFormData) {
+
+    try {
+      const response = await api.post('/users', {
+        name,email,password
+      })
+
+      console.log(response)
+
+    } catch (error) {
+      if(axios.isAxiosError(error)){
+
+        Alert.alert(error?.response?.data?.message)
+      }
+
+    }
+
+
+    /*fetch('http://192.168.2.111:3333/users',{
       method:'POST',
      headers:{
       'Accept':'application/json',
@@ -45,7 +64,7 @@ export function SignUp() {
      body: JSON.stringify({name,email,password})
     })
     .then(response => response.json())
-    .then(data => console.log( data))
+    .then(data => console.log( data))*/
   }
 
   return (
