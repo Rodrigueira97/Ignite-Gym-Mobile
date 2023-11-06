@@ -1,4 +1,4 @@
-import { View, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { NativeBaseProvider } from "native-base";
 import {
   useFonts,
@@ -9,6 +9,7 @@ import { Loading } from "@components/Loading";
 import { THEME } from "./src/theme";
 import { SignUp } from "@screens/SignUp";
 import { Routes } from "@routes/index";
+import { AuthContext, AuthContextProvider } from "@contexts/AuthContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,7 +25,9 @@ export default function App() {
         translucent
       />
 
-      {fontsLoaded ? <Routes /> : <Loading />}
+      <AuthContextProvider>
+        {fontsLoaded ? <Routes /> : <Loading />}
+      </AuthContextProvider>
     </NativeBaseProvider>
   );
 }
