@@ -5,3 +5,9 @@ export interface userDTO {
       email:string;
       avatar: string;
 }
+
+export interface createUserDTO {
+      name:string;
+      email:string;
+      password:string;
+}
