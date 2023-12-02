@@ -1,14 +1,14 @@
-import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from "native-base";
-import BackgroundImg from "@assets/background.png";
-import LogoSvg from "@assets/logo.svg";
-import { Input } from "@components/Input";
-import { Button } from "@components/Button";
-import { useNavigation } from "@react-navigation/native";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "./form";
-import { api } from "@services/api";
-import { AppError } from "@utils/AppError";
+import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from 'native-base';
+import { Controller, useForm } from 'react-hook-form';
+import BackgroundImg from '@assets/background.png';
+import LogoSvg from '@assets/logo.svg';
+import { Button } from '@components/Button';
+import { Input } from '@components/Input';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigation } from '@react-navigation/native';
+import { api } from '@services/api';
+import { AppError } from '@utils/AppError';
+import { schema } from './form';
 
 interface PropsFormData {
   name: string;
@@ -20,13 +20,13 @@ interface PropsFormData {
 export function SignUp() {
   const { goBack } = useNavigation();
 
-  const {show:toast} = useToast()
+  const { show: toast } = useToast();
 
   const initialValues = {
-    name: "",
-    email: "",
-    password: "",
-    passwordConfirmation: "",
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirmation: '',
   };
 
   const {
@@ -38,25 +38,27 @@ export function SignUp() {
     defaultValues: initialValues,
   });
 
-  async function handleSignUp({name,email,password}: PropsFormData) {
-
+  async function handleSignUp({ name, email, password }: PropsFormData) {
     try {
       const response = await api.post('/users', {
-        name,email,password
-      })
+        name,
+        email,
+        password,
+      });
 
-      console.log(response)
-
+      console.log(response);
     } catch (error) {
-      const title =  error instanceof AppError ? error.message : 'Não foi possível criar a conta!, Tente novamente mais tarde'
+      const title =
+        error instanceof AppError
+          ? error.message
+          : 'Não foi possível criar a conta!, Tente novamente mais tarde';
 
       toast({
         title,
-        placement:'top',
-        bgColor:'red.500'
-      })
+        placement: 'top',
+        bgColor: 'red.500',
+      });
     }
-
 
     /*fetch('http://192.168.2.111:3333/users',{
       method:'POST',
@@ -160,18 +162,10 @@ export function SignUp() {
             )}
           />
 
-          <Button
-            title="Criar e acessar"
-            onPress={handleSubmit(handleSignUp)}
-          />
+          <Button title="Criar e acessar" onPress={handleSubmit(handleSignUp)} />
         </Center>
 
-        <Button
-          mt={12}
-          title="Voltar para o login"
-          variant="outline"
-          onPress={goBack}
-        />
+        <Button mt={12} title="Voltar para o login" variant="outline" onPress={goBack} />
       </VStack>
     </ScrollView>
   );

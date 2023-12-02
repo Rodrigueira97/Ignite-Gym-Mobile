@@ -1,4 +1,4 @@
-import { IImageProps, Image } from "native-base";
+import { IImageProps, Image } from 'native-base';
 
 interface Props extends IImageProps {
   size: number;
@@ -6,13 +6,6 @@ interface Props extends IImageProps {
 
 export function UserPhoto({ size, ...rest }: Props) {
   return (
-    <Image
-      w={size}
-      h={size}
-      rounded={"full"}
-      borderWidth={2}
-      borderColor={"gray.400"}
-      {...rest}
-    />
+    <Image w={size} h={size} rounded={'full'} borderWidth={2} borderColor={'gray.400'} {...rest} />
   );
 }

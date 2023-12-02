@@ -1,8 +1,8 @@
-import { AppError } from "@utils/AppError";
-import axios from "axios";
+import axios from 'axios';
+import { AppError } from '@utils/AppError';
 
 export const api = axios.create({
-  baseURL: "http://127.0.0.1:3333",
+  baseURL: 'http://127.0.0.1:3333',
 });
 
 api.interceptors.response.use(
@@ -13,5 +13,5 @@ api.interceptors.response.use(
     } else {
       return Promise.reject(error);
     }
-  }
+  },
 );

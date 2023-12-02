@@ -1,13 +1,15 @@
-import { Center, Heading, Image, ScrollView, Text, VStack } from "native-base";
-import BackgroundImg from "@assets/background.png";
-import LogoSvg from "@assets/logo.svg";
-import { Input } from "@components/Input";
-import { Button } from "@components/Button";
-import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "./form";
+import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from 'native-base';
+import { Controller, useForm } from 'react-hook-form';
+import BackgroundImg from '@assets/background.png';
+import LogoSvg from '@assets/logo.svg';
+import { Button } from '@components/Button';
+import { Input } from '@components/Input';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from '@hooks/useAuth';
+import { useNavigation } from '@react-navigation/native';
+import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
+import { AppError } from '@utils/AppError';
+import { schema } from './form';
 
 interface LoginDto {
   email: string;
@@ -16,10 +18,12 @@ interface LoginDto {
 
 export function SignIn() {
   const { navigate } = useNavigation<AuthNavigatorRoutesProps>();
+  const { user, signIn } = useAuth();
+  const { show } = useToast();
 
   const initialData = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   };
 
   const {
@@ -32,12 +36,33 @@ export function SignIn() {
   });
 
   function handleNewAccount() {
-    navigate("signUp");
+    navigate('signUp');
   }
 
-  function handleLogin(data: LoginDto) {
-    console.log(data);
+  async function handleLogin({ email, password }: LoginDto) {
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+
+      if (isAppError) {
+        return show({
+          title: error.message,
+          placement: 'top',
+          bgColor: 'red.500',
+        });
+      }
+      const title = 'Erro ao acessar a conta, tente novamente mais tarde';
+
+      return show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500',
+      });
+    }
   }
+
+  console.log(user);
 
   // lack to do the form and your validations
   return (
@@ -107,11 +132,7 @@ export function SignIn() {
             Ainda não tem acesso?
           </Text>
 
-          <Button
-            title="Criar conta"
-            variant="outline"
-            onPress={handleNewAccount}
-          />
+          <Button title="Criar conta" variant="outline" onPress={handleNewAccount} />
         </Center>
       </VStack>
     </ScrollView>

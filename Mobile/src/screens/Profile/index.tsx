@@ -1,26 +1,16 @@
-import { Button } from "@components/Button";
-import { Input } from "@components/Input";
-import { ScreenHeader } from "@components/ScreenHeader";
-import { UserPhoto } from "@components/UserPhoto";
-import {
-  Center,
-  Heading,
-  ScrollView,
-  Skeleton,
-  Text,
-  VStack,
-  useToast,
-} from "native-base";
-import { useState } from "react";
-import { TouchableOpacity } from "react-native";
-import * as FileSystem from "expo-file-system";
-import * as ImagePicker from "expo-image-picker";
+import { useState } from 'react';
+import * as FileSystem from 'expo-file-system';
+import * as ImagePicker from 'expo-image-picker';
+import { Center, Heading, ScrollView, Skeleton, Text, VStack, useToast } from 'native-base';
+import { TouchableOpacity } from 'react-native';
+import { Button } from '@components/Button';
+import { Input } from '@components/Input';
+import { ScreenHeader } from '@components/ScreenHeader';
+import { UserPhoto } from '@components/UserPhoto';
 
 export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
-  const [userPhoto, setUserPhoto] = useState(
-    "https://github.com/rodrigueira97.png"
-  );
+  const [userPhoto, setUserPhoto] = useState('https://github.com/rodrigueira97.png');
 
   const toast = useToast();
 
@@ -45,9 +35,9 @@ export function Profile() {
 
         if (photoInfo?.size && photoInfo.size / 1024 / 1024 > 2) {
           return toast.show({
-            title: "Essa imagem é muito grande. Escolha uma de até 5MB",
-            placement: "top",
-            bgColor: "red.500",
+            title: 'Essa imagem é muito grande. Escolha uma de até 5MB',
+            placement: 'top',
+            bgColor: 'red.500',
           });
         }
         setUserPhoto(photoPerfil);
@@ -74,9 +64,9 @@ export function Profile() {
             <Skeleton
               w={PHOTO_SIZE}
               h={PHOTO_SIZE}
-              rounded={"full"}
-              startColor={"gray.500"}
-              endColor={"gray.400"}
+              rounded={'full'}
+              startColor={'gray.500'}
+              endColor={'gray.400'}
             />
           ) : (
             <UserPhoto
@@ -89,46 +79,31 @@ export function Profile() {
           )}
 
           <TouchableOpacity onPress={handleUserPhotoSelect}>
-            <Text
-              color={"green.500"}
-              fontWeight={"bold"}
-              fontSize={"md"}
-              mt={2}
-              mb={8}
-            >
+            <Text color={'green.500'} fontWeight={'bold'} fontSize={'md'} mt={2} mb={8}>
               Alterar foto
             </Text>
           </TouchableOpacity>
 
-          <Input placeholder="Nome" bg={"gray.600"} />
+          <Input placeholder="Nome" bg={'gray.600'} />
 
-          <Input
-            bg={"gray.600"}
-            placeholder="E-mail"
-            value="rodrigoxc97@hotmail.com"
-            isDisabled
-          />
+          <Input bg={'gray.600'} placeholder="E-mail" value="rodrigoxc97@hotmail.com" isDisabled />
 
           <Heading
-            color={"gray.200"}
-            fontSize={"md"}
-            alignSelf={"flex-start"}
-            fontFamily={"heading"}
+            color={'gray.200'}
+            fontSize={'md'}
+            alignSelf={'flex-start'}
+            fontFamily={'heading'}
             mb={2}
             mt={12}
           >
             Alterar senha
           </Heading>
 
-          <Input bg={"gray.600"} placeholder="Senha antiga" secureTextEntry />
+          <Input bg={'gray.600'} placeholder="Senha antiga" secureTextEntry />
 
-          <Input bg={"gray.600"} placeholder="Nova senha" secureTextEntry />
+          <Input bg={'gray.600'} placeholder="Nova senha" secureTextEntry />
 
-          <Input
-            bg={"gray.600"}
-            placeholder="Confirme a nova senha"
-            secureTextEntry
-          />
+          <Input bg={'gray.600'} placeholder="Confirme a nova senha" secureTextEntry />
 
           <Button title="Atualizar" mt={4} />
         </Center>

@@ -1,16 +1,13 @@
-import {
-  BottomTabNavigationProp,
-  createBottomTabNavigator,
-} from "@react-navigation/bottom-tabs";
-import { Home } from "@screens/Home";
-import { History } from "@screens/History";
-import { Profile } from "@screens/Profile";
-import { Exercise } from "@screens/Exercise";
-import HomeSvg from "@assets/home.svg";
-import HistorySvg from "@assets/history.svg";
-import ProfileSvg from "@assets/profile.svg";
-import { useTheme } from "native-base";
-import { Platform } from "react-native";
+import { useTheme } from 'native-base';
+import { Platform } from 'react-native';
+import HistorySvg from '@assets/history.svg';
+import HomeSvg from '@assets/home.svg';
+import ProfileSvg from '@assets/profile.svg';
+import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Exercise } from '@screens/Exercise';
+import { History } from '@screens/History';
+import { Home } from '@screens/Home';
+import { Profile } from '@screens/Profile';
 
 type AppRoutes = {
   home: undefined;
@@ -38,7 +35,7 @@ export function AppRoutes() {
         tabBarStyle: {
           backgroundColor: colors.gray[600],
           borderTopWidth: 0,
-          height: Platform.OS === "android" ? "auto" : 96,
+          height: Platform.OS === 'android' ? 'auto' : 96,
           paddingBottom: sizes[10],
           paddingTop: sizes[6],
         },
@@ -48,9 +45,7 @@ export function AppRoutes() {
         name="home"
         component={Home}
         options={{
-          tabBarIcon: ({ color }) => (
-            <HomeSvg fill={color} width={iconSize} height={iconSize} />
-          ),
+          tabBarIcon: ({ color }) => <HomeSvg fill={color} width={iconSize} height={iconSize} />,
         }}
       />
 
@@ -58,9 +53,7 @@ export function AppRoutes() {
         name="history"
         component={History}
         options={{
-          tabBarIcon: ({ color }) => (
-            <HistorySvg fill={color} width={iconSize} height={iconSize} />
-          ),
+          tabBarIcon: ({ color }) => <HistorySvg fill={color} width={iconSize} height={iconSize} />,
         }}
       />
 
@@ -68,17 +61,11 @@ export function AppRoutes() {
         name="profile"
         component={Profile}
         options={{
-          tabBarIcon: ({ color }) => (
-            <ProfileSvg fill={color} width={iconSize} height={iconSize} />
-          ),
+          tabBarIcon: ({ color }) => <ProfileSvg fill={color} width={iconSize} height={iconSize} />,
         }}
       />
 
-      <Screen
-        name="exercise"
-        component={Exercise}
-        options={{ tabBarButton: () => null }}
-      />
+      <Screen name="exercise" component={Exercise} options={{ tabBarButton: () => null }} />
     </Navigator>
   );
 }
