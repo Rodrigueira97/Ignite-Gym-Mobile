@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from 'native-base';
 import { Controller, useForm } from 'react-hook-form';
 import BackgroundImg from '@assets/background.png';
@@ -18,8 +19,9 @@ interface LoginDto {
 
 export function SignIn() {
   const { navigate } = useNavigation<AuthNavigatorRoutesProps>();
-  const { user, signIn } = useAuth();
+  const { signIn } = useAuth();
   const { show } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialData = {
     email: '',
@@ -41,9 +43,12 @@ export function SignIn() {
 
   async function handleLogin({ email, password }: LoginDto) {
     try {
+      setIsLoading(true);
       await signIn(email, password);
     } catch (error) {
       const isAppError = error instanceof AppError;
+
+      setIsLoading(false);
 
       if (isAppError) {
         return show({
@@ -61,9 +66,6 @@ export function SignIn() {
       });
     }
   }
-
-  console.log(user);
-
   // lack to do the form and your validations
   return (
     <ScrollView
@@ -97,7 +99,7 @@ export function SignIn() {
           <Controller
             name="email"
             control={control}
-            render={({ field: { name, value, onChange } }) => (
+            render={({ field: { value, onChange } }) => (
               <Input
                 placeholder="E-mail"
                 keyboardType="email-address"
@@ -124,7 +126,7 @@ export function SignIn() {
             )}
           />
 
-          <Button title="Acessar" onPress={handleSubmit(handleLogin)} />
+          <Button title="Acessar" isLoading={isLoading} onPress={handleSubmit(handleLogin)} />
         </Center>
 
         <Center mt={24}>
