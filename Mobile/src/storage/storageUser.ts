@@ -13,3 +13,7 @@ export async function storageUserGet() {
 
   return user;
 }
+
+export async function storageUserRemove() {
+  return await AsyncStorage.clear();
+}

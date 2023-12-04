@@ -1,11 +1,12 @@
 import { HStack, Heading, Icon, Text, VStack } from 'native-base';
+import { TouchableOpacity } from 'react-native';
 import DefaultAvatar from '@assets/userPhotoDefault.png';
 import { UserPhoto } from '@components/UserPhoto';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '@hooks/useAuth';
 
 export function HomeHeader() {
-  const { user } = useAuth();
+  const { user, signUp } = useAuth();
 
   return (
     <HStack bgColor={'gray.600'} pt={16} pb={5} px={8} alignItems={'center'}>
@@ -32,7 +33,9 @@ export function HomeHeader() {
         </Heading>
       </VStack>
 
-      <Icon as={MaterialIcons} name="logout" color={'gray.200'} size={7} />
+      <TouchableOpacity onPress={signUp}>
+        <Icon as={MaterialIcons} name="logout" color={'gray.200'} size={7} />
+      </TouchableOpacity>
     </HStack>
   );
 }

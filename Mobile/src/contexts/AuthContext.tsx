@@ -1,12 +1,13 @@
 import { ReactNode, createContext, useEffect, useState } from 'react';
 import { userDTO } from '@dtos/userDTO';
 import { api } from '@services/api';
-import { storageUserGet, storageUserSave } from '@storage/storageUser';
+import { storageUserGet, storageUserRemove, storageUserSave } from '@storage/storageUser';
 
 interface PropsAuthContext {
   user: userDTO;
   setUser: React.Dispatch<React.SetStateAction<userDTO>>;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: () => void;
   isLoading: boolean;
 }
 
@@ -34,6 +35,16 @@ export function AuthContextProvider({ children }: PropsProvider) {
     }
   }
 
+  async function signUp() {
+    try {
+      setIsLoading(true);
+      setUser({} as userDTO);
+      await storageUserRemove();
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function loadUserData() {
     try {
       const userLogged = await storageUserGet();
@@ -51,7 +62,7 @@ export function AuthContextProvider({ children }: PropsProvider) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, signIn, isLoading }}>
+    <AuthContext.Provider value={{ user, setUser, signIn, isLoading, signUp }}>
       {children}
     </AuthContext.Provider>
   );

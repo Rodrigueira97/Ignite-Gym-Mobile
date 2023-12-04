@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from 'native-base';
 import { Controller, useForm } from 'react-hook-form';
 import BackgroundImg from '@assets/background.png';
@@ -5,6 +6,7 @@ import LogoSvg from '@assets/logo.svg';
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from '@hooks/useAuth';
 import { useNavigation } from '@react-navigation/native';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
@@ -19,6 +21,8 @@ interface PropsFormData {
 
 export function SignUp() {
   const { goBack } = useNavigation();
+  const { signIn } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { show: toast } = useToast();
 
@@ -40,14 +44,18 @@ export function SignUp() {
 
   async function handleSignUp({ name, email, password }: PropsFormData) {
     try {
-      const response = await api.post('/users', {
+      setIsLoading(true);
+
+      await api.post('/users', {
         name,
         email,
         password,
       });
 
-      console.log(response);
+      await signIn(email, password);
     } catch (error) {
+      setIsLoading(false);
+
       const title =
         error instanceof AppError
           ? error.message
@@ -58,6 +66,8 @@ export function SignUp() {
         placement: 'top',
         bgColor: 'red.500',
       });
+    } finally {
+      setIsLoading(false);
     }
 
     /*fetch('http://192.168.2.111:3333/users',{
@@ -162,7 +172,11 @@ export function SignUp() {
             )}
           />
 
-          <Button title="Criar e acessar" onPress={handleSubmit(handleSignUp)} />
+          <Button
+            title="Criar e acessar"
+            onPress={handleSubmit(handleSignUp)}
+            isLoading={isLoading}
+          />
         </Center>
 
         <Button mt={12} title="Voltar para o login" variant="outline" onPress={goBack} />
