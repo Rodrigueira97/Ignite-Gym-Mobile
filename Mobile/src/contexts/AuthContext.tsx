@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from 'react';
 import { userDTO } from '@dtos/userDTO';
 import { api } from '@services/api';
+import { storageAuthTokenGet, storageAuthTokenSave } from '@storage/storageAuthToken';
 import { storageUserGet, storageUserRemove, storageUserSave } from '@storage/storageUser';
 
 interface PropsAuthContext {
@@ -21,17 +22,26 @@ export function AuthContextProvider({ children }: PropsProvider) {
   const [user, setUser] = useState<userDTO>({} as userDTO);
   const [isLoading, setIsLoading] = useState(true);
 
+  async function userAndTokenUpdate(userData: userDTO, token: string) {
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+    setUser(userData);
+  }
+
   async function signIn(email: string, password: string) {
     // eslint-disable-next-line no-useless-catch
     try {
       const { data } = await api.post('/sessions', { email, password });
+      setIsLoading(true);
 
-      if (data?.user) {
-        storageUserSave(data?.user);
+      if (data?.user && data?.token) {
+        await storageUserSave(data?.user);
+        await storageAuthTokenSave(data?.token);
         setUser(data?.user);
+        userAndTokenUpdate(data?.user, data?.token);
       }
-    } catch (error) {
-      throw error;
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -47,10 +57,14 @@ export function AuthContextProvider({ children }: PropsProvider) {
 
   async function loadUserData() {
     try {
-      const userLogged = await storageUserGet();
+      setIsLoading(true);
 
-      if (userLogged) {
+      const userLogged = await storageUserGet();
+      const token = await storageAuthTokenGet();
+
+      if (userLogged && token) {
         setUser(userLogged);
+        userAndTokenUpdate(userLogged, token);
       }
     } finally {
       setIsLoading(false);
