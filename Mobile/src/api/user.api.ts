@@ -14,3 +14,9 @@ export async function findGroupsExercises() {
 
   return data;
 }
+
+export async function fetchExercisesByGroup(group: string) {
+  const { data } = await api.get(`/exercises/bygroup/${group}`);
+
+  return data;
+}

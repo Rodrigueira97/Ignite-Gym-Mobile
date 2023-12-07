@@ -2,6 +2,7 @@ import axios from 'axios';
 import { AppError } from '@utils/AppError';
 
 export const api = axios.create({
+  timeout: 1000 * 30, // 30 seconds
   baseURL: 'http://127.0.0.1:3333',
 });
 
