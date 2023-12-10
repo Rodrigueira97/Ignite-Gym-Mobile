@@ -2,17 +2,27 @@ import { useState } from 'react';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { Center, Heading, ScrollView, Skeleton, Text, VStack, useToast } from 'native-base';
+import { Controller, useForm } from 'react-hook-form';
 import { TouchableOpacity } from 'react-native';
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
+import { useAuth } from '@hooks/useAuth';
 
 export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [userPhoto, setUserPhoto] = useState('https://github.com/rodrigueira97.png');
+  const { user } = useAuth();
 
   const toast = useToast();
+
+  const { control } = useForm({
+    defaultValues: {
+      name: user?.name,
+      email: user?.email,
+    },
+  });
 
   async function handleUserPhotoSelect() {
     setPhotoIsLoading(true);
@@ -84,9 +94,27 @@ export function Profile() {
             </Text>
           </TouchableOpacity>
 
-          <Input placeholder="Nome" bg={'gray.600'} />
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { value, onChange } }) => (
+              <Input placeholder="Nome" bg={'gray.600'} value={value} onChangeText={onChange} />
+            )}
+          />
 
-          <Input bg={'gray.600'} placeholder="E-mail" value="rodrigoxc97@hotmail.com" isDisabled />
+          <Controller
+            name="email"
+            control={control}
+            render={({ field: { value, onChange } }) => (
+              <Input
+                bg={'gray.600'}
+                placeholder="E-mail"
+                value={value}
+                onChangeText={onChange}
+                isDisabled
+              />
+            )}
+          />
 
           <Heading
             color={'gray.200'}
