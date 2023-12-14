@@ -10,20 +10,24 @@ import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '@hooks/useAuth';
+import { api } from '@services/api';
+import { storageUserSave } from '@storage/storageUser';
+import { AppError } from '@utils/AppError';
 import { Schema } from './form';
 
 interface ProfileDataProps {
   name: string;
-  email: string;
-  old_password: string;
-  password: string;
-  confirm_password: string;
+  email?: string;
+  old_password?: string;
+  password?: string;
+  confirm_password?: string;
 }
 
 export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [userPhoto, setUserPhoto] = useState('https://github.com/rodrigueira97.png');
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
 
   const toast = useToast();
 
@@ -78,7 +82,34 @@ export function Profile() {
   }
 
   async function handleProfileUpdate(data: ProfileDataProps) {
-    console.log(data);
+    try {
+      setIsLoadingProfile(true);
+
+      user.name = data.name;
+
+      await api.put('/users', data);
+
+      setUser(user);
+
+      await storageUserSave(user);
+
+      toast.show({
+        title: 'Perfil atualizado com sucesso',
+        placement: 'top',
+        bgColor: 'green.500',
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Error ao atualizar perfil';
+
+      toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500',
+      });
+    } finally {
+      setIsLoadingProfile(false);
+    }
   }
 
   const PHOTO_SIZE = 33;
@@ -197,7 +228,12 @@ export function Profile() {
             )}
           />
 
-          <Button title="Atualizar" mt={4} onPress={handleSubmit(handleProfileUpdate)} />
+          <Button
+            title="Atualizar"
+            mt={4}
+            onPress={handleSubmit(handleProfileUpdate)}
+            isLoading={isLoadingProfile}
+          />
         </Center>
       </ScrollView>
     </VStack>
