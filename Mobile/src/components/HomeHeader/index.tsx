@@ -1,9 +1,10 @@
 import { HStack, Heading, Icon, Text, VStack } from 'native-base';
 import { TouchableOpacity } from 'react-native';
-import DefaultAvatar from '@assets/userPhotoDefault.png';
+import DefaultUserAvatar from '@assets/userPhotoDefault.png';
 import { UserPhoto } from '@components/UserPhoto';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '@hooks/useAuth';
+import { api } from '@services/api';
 
 export function HomeHeader() {
   const { user, signUp } = useAuth();
@@ -15,11 +16,11 @@ export function HomeHeader() {
         alt="Imagem de perfil do usuário"
         mr={4}
         source={
-          user.avatar
+          user?.avatar
             ? {
-                uri: user?.avatar,
+                uri: `${api.defaults.baseURL}/avatar/${user?.avatar}`,
               }
-            : DefaultAvatar
+            : DefaultUserAvatar
         }
       />
 
