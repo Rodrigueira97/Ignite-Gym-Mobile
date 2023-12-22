@@ -75,6 +75,14 @@ export function AuthContextProvider({ children }: PropsProvider) {
     loadUserData();
   }, []);
 
+  useEffect(() => {
+    const subscribe = api.registerInterceptorTokenManager(signUp);
+
+    return () => {
+      subscribe();
+    };
+  }, []);
+
   return (
     <AuthContext.Provider value={{ user, setUser, signIn, isLoading, signUp }}>
       {children}

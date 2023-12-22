@@ -1,11 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
 import { AppError } from '@utils/AppError';
 
-interface SingOutProps {
-  signOut: () => void;
-}
+type SignOut = () => void;
 interface ApiInstaceProps extends AxiosInstance {
-  registerInterceptorTokenManager: ({ signOut }: SingOutProps) => () => void;
+  registerInterceptorTokenManager: (signOut: SignOut) => () => void;
 }
 
 export const api = axios.create({
@@ -13,15 +11,31 @@ export const api = axios.create({
   baseURL: 'http://127.0.0.1:3333',
 }) as ApiInstaceProps;
 
-api.registerInterceptorTokenManager = (signOut) => {};
+api.registerInterceptorTokenManager = (signOut) => {
+  const interceptorTokenManger = api.interceptors.response.use(
+    (response) => response,
+    (requestError) => {
+      if (requestError?.response?.status === 401) {
+        if (
+          requestError.response?.data?.message === 'token.expired' ||
+          requestError.response?.data?.message === 'token.invalid'
+        ) {
+        }
 
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.data) {
-      return Promise.reject(new AppError(error.response.data.message));
-    } else {
-      return Promise.reject(error);
-    }
-  },
-);
+        signOut();
+      }
+
+      if (requestError.response && requestError.response.data) {
+        return Promise.reject(new AppError(requestError.response.data.message));
+      } else {
+        return Promise.reject(requestError);
+      }
+    },
+  );
+
+  function handleEjectInterceptorTokenManager() {
+    api.interceptors.response.eject(interceptorTokenManger);
+  }
+
+  return handleEjectInterceptorTokenManager();
+};
