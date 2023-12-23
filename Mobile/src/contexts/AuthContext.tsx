@@ -34,9 +34,9 @@ export function AuthContextProvider({ children }: PropsProvider) {
       const { data } = await api.post('/sessions', { email, password });
       setIsLoading(true);
 
-      if (data?.user && data?.token) {
+      if (data?.user && data?.token && data?.refresh_token) {
         await storageUserSave(data?.user);
-        await storageAuthTokenSave(data?.token);
+        await storageAuthTokenSave({ refresh_token: data?.refresh_token, token: data?.token });
         setUser(data?.user);
         userAndTokenUpdate(data?.user, data?.token);
       }
@@ -60,7 +60,7 @@ export function AuthContextProvider({ children }: PropsProvider) {
       setIsLoading(true);
 
       const userLogged = await storageUserGet();
-      const token = await storageAuthTokenGet();
+      const { token } = await storageAuthTokenGet();
 
       if (userLogged && token) {
         setUser(userLogged);
