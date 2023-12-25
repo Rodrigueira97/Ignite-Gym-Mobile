@@ -1,4 +1,4 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { storageAuthTokenGet } from '@storage/storageAuthToken';
 import { AppError } from '@utils/AppError';
@@ -8,10 +8,10 @@ interface ApiInstaceProps extends AxiosInstance {
   registerInterceptorTokenManager: (signOut: SignOut) => () => void;
 }
 
-interface PromiseProps {
-  onSuccess: (token: string) => void;
-  onFailure: (error: AxiosError) => void;
-}
+// interface PromiseProps {
+//   onSuccess: (token: string) => void;
+//   onFailure: (error: AxiosError) => void;
+// }
 
 export const api = axios.create({
   timeout: 1000 * 30, // 30 seconds
