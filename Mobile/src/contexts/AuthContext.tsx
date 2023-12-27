@@ -8,7 +8,7 @@ interface PropsAuthContext {
   user: userDTO;
   setUser: React.Dispatch<React.SetStateAction<userDTO>>;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: () => void;
+  signOut: () => void;
   isLoading: boolean;
 }
 
@@ -45,7 +45,7 @@ export function AuthContextProvider({ children }: PropsProvider) {
     }
   }
 
-  async function signUp() {
+  async function signOut() {
     try {
       setIsLoading(true);
       setUser({} as userDTO);
@@ -76,15 +76,15 @@ export function AuthContextProvider({ children }: PropsProvider) {
   }, []);
 
   useEffect(() => {
-    const subscribe = api.registerInterceptorTokenManager(signUp);
+    const subscribe = api.registerInterceptorTokenManager(signOut);
 
     return () => {
       subscribe();
     };
-  }, []);
+  }, [signOut]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, signIn, isLoading, signUp }}>
+    <AuthContext.Provider value={{ user, setUser, signIn, isLoading, signOut }}>
       {children}
     </AuthContext.Provider>
   );

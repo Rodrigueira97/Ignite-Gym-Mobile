@@ -38,7 +38,7 @@ export function SignIn() {
   });
 
   function handleNewAccount() {
-    navigate('signUp');
+    navigate('signOut');
   }
 
   async function handleLogin({ email, password }: LoginDto) {

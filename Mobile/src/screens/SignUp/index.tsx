@@ -19,7 +19,7 @@ interface PropsFormData {
   passwordConfirmation: string;
 }
 
-export function SignUp() {
+export function signOut() {
   const { goBack } = useNavigation();
   const { signIn } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,7 @@ export function SignUp() {
     defaultValues: initialValues,
   });
 
-  async function handleSignUp({ name, email, password }: PropsFormData) {
+  async function handlesignOut({ name, email, password }: PropsFormData) {
     try {
       setIsLoading(true);
 
@@ -165,7 +165,7 @@ export function SignUp() {
                 isFilledInput={value.length >= 6}
                 onChangeText={onChange}
                 value={value}
-                onSubmitEditing={handleSubmit(handleSignUp)}
+                onSubmitEditing={handleSubmit(handlesignOut)}
                 returnKeyType="send"
                 errorMessage={errors?.passwordConfirmation?.message}
               />
@@ -174,7 +174,7 @@ export function SignUp() {
 
           <Button
             title="Criar e acessar"
-            onPress={handleSubmit(handleSignUp)}
+            onPress={handleSubmit(handlesignOut)}
             isLoading={isLoading}
           />
         </Center>

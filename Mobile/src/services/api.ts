@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { storageAuthTokenGet } from '@storage/storageAuthToken';
 import { AppError } from '@utils/AppError';
 
@@ -26,10 +26,9 @@ api.registerInterceptorTokenManager = (signOut) => {
     (response) => response,
     async (requestError) => {
       if (requestError?.response?.status === 401) {
-        if (
-          requestError.response?.data?.message === 'token.expired' ||
-          requestError.response?.data?.message === 'token.invalid'
-        ) {
+        const errorMessage = requestError.response.data?.message;
+
+        if (errorMessage === 'token.expired' || errorMessage === 'token.invalid') {
           const { refresh_token } = await storageAuthTokenGet();
 
           if (!refresh_token) {
@@ -71,9 +70,7 @@ api.registerInterceptorTokenManager = (signOut) => {
     },
   );
 
-  function handleEjectInterceptorTokenManager() {
+  return () => {
     api.interceptors.response.eject(interceptorTokenManger);
-  }
-
-  return handleEjectInterceptorTokenManager();
+  };
 };

@@ -7,7 +7,7 @@ import { useAuth } from '@hooks/useAuth';
 import { api } from '@services/api';
 
 export function HomeHeader() {
-  const { user, signUp } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <HStack bgColor={'gray.600'} pt={16} pb={5} px={8} alignItems={'center'}>
@@ -34,7 +34,7 @@ export function HomeHeader() {
         </Heading>
       </VStack>
 
-      <TouchableOpacity onPress={signUp}>
+      <TouchableOpacity onPress={signOut}>
         <Icon as={MaterialIcons} name="logout" color={'gray.200'} size={7} />
       </TouchableOpacity>
     </HStack>
