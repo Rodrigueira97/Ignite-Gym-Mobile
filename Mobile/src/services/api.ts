@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import { storageAuthTokenGet } from '@storage/storageAuthToken';
 import { AppError } from '@utils/AppError';
 
@@ -8,10 +8,10 @@ interface ApiInstaceProps extends AxiosInstance {
   registerInterceptorTokenManager: (signOut: SignOut) => () => void;
 }
 
-// interface PromiseProps {
-//   onSuccess: (token: string) => void;
-//   onFailure: (error: AxiosError) => void;
-// }
+interface PromiseProps {
+  onSuccess: (token: string) => void;
+  onFailure: (error: AxiosError) => void;
+}
 
 export const api = axios.create({
   timeout: 1000 * 30, // 30 seconds
@@ -37,7 +37,7 @@ api.registerInterceptorTokenManager = (signOut) => {
             return Promise.reject(requestError);
           }
 
-          const originalRequestConfig = requestError.config;
+          // const originalRequestConfig = requestError.config;
 
           // if (isRefreshing) {
           //   return new Promise((resolve, reject) => {
@@ -57,6 +57,24 @@ api.registerInterceptorTokenManager = (signOut) => {
           // }
 
           // setIsRefreshing(true);
+
+          // return new Promise(async (resolve, reject) => {
+          //   try {
+          //     const { data } = await api.post('/sessions/refresh-token', { refresh_token });
+
+          //     console.log(data);
+          //   } catch (error: any) {
+          //     failedQueue.forEach((request) => {
+          //       request.onFailure(error);
+          //     });
+
+          //     signOut();
+          //     reject(error);
+          //   } finally {
+          //     setIsRefreshing(false);
+          //     setFailedQueue([]);
+          //   }
+          // });
         }
 
         signOut();

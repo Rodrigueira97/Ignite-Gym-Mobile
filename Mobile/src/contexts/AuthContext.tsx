@@ -36,7 +36,7 @@ export function AuthContextProvider({ children }: PropsProvider) {
 
       if (data?.user && data?.token && data?.refresh_token) {
         await storageUserSave(data?.user);
-        await storageAuthTokenSave({ refresh_token: data?.refresh_token, token: data?.token });
+        await storageAuthTokenSave({ token: data?.token, refresh_token: data?.refresh_token });
         setUser(data?.user);
         userAndTokenUpdate(data?.user, data?.token);
       }
