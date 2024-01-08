@@ -64,6 +64,7 @@ export function AuthContextProvider({ children }: PropsProvider) {
 
       if (userLogged && token) {
         setUser(userLogged);
+
         userAndTokenUpdate(userLogged, token);
       }
     } finally {
